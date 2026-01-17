@@ -1,5 +1,5 @@
 from fastapi import FastAPI,status, Depends, HTTPException
-from app.models.models import User
+from app.models.users import User
 from app.core.database import engine, SessionLocal, Base
 from app.auth.securities import hash_password
 from app.api.auth import router
