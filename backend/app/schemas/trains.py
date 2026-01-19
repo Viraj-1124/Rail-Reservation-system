@@ -11,4 +11,4 @@ class TrainResponse(BaseModel):
     train_name: str
 
     class config:
-        orm_mode =True
+        from_attributes = True

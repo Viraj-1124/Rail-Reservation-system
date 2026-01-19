@@ -20,8 +20,8 @@ def create_station(data: StationCreate, db: Session = Depends(get_db)):
 
 
 @station_router.post("/{station_id}",dependencies=[Depends(admin_only)])
-def update_station(station_id: int, data: StationCreate, db:Session = Depends(get_db)):
-    station = db.query(Station).get(station_id)
+def update_station(station_code: int, data: StationCreate, db:Session = Depends(get_db)):
+    station = db.query(Station).filter(Station.code ==station_code).first()
     if not station:
         raise HTTPException(status_code=404, detail="Station not found")
     
@@ -31,18 +31,18 @@ def update_station(station_id: int, data: StationCreate, db:Session = Depends(ge
     db.commit()
     return station
 
-@station_router.delete("/{station_id}",dependencies=[Depends(admin_only)])
-def delelte_station(station_id: int, db:Session = Depends(get_db)):
-    station = db.query(Station).get(station_id)
+@station_router.delete("/{station_code}",dependencies=[Depends(admin_only)])
+def delelte_station(station_code: int, db:Session = Depends(get_db)):
+    station = db.query(Station).filter(Station.code ==station_code).first()
     if not station:
         raise HTTPException(status_code=404, detail="Station not found")
     
     db.delete(station)
-    db.commit
+    db.commit()
     return {"message": "Station deleted"}
 
 
-@station_router.get("/",response_model=StationResponse)
+@station_router.get("/",response_model=list[StationResponse])
 def get_station(db:Session = Depends(get_db)):
     return db.query(Station).all()
 
