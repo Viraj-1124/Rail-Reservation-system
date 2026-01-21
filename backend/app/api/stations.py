@@ -19,20 +19,20 @@ def create_station(data: StationCreate, db: Session = Depends(get_db)):
     return station
 
 
-@station_router.post("/{station_id}",dependencies=[Depends(admin_only)])
-def update_station(station_code: int, data: StationCreate, db:Session = Depends(get_db)):
+@station_router.put("/{station_code}",dependencies=[Depends(admin_only)])
+def update_station(station_code: str, data: StationCreate, db:Session = Depends(get_db)):
     station = db.query(Station).filter(Station.code ==station_code).first()
     if not station:
         raise HTTPException(status_code=404, detail="Station not found")
     
-    for key,value in data.dict().items():
+    for key,value in data.model_dump().items():
         setattr(station,key,value)
 
     db.commit()
     return station
 
 @station_router.delete("/{station_code}",dependencies=[Depends(admin_only)])
-def delelte_station(station_code: int, db:Session = Depends(get_db)):
+def delelte_station(station_code: str, db:Session = Depends(get_db)):
     station = db.query(Station).filter(Station.code ==station_code).first()
     if not station:
         raise HTTPException(status_code=404, detail="Station not found")
@@ -47,17 +47,17 @@ def get_station(db:Session = Depends(get_db)):
     return db.query(Station).all()
 
 
-@station_router.get("/{station_id}")
+@station_router.get("code/{station_id}")
 def search_station(station_code: int, db:Session = Depends(get_db)):
-    station = db.query(Station).filter(station_code==Station.code).first()
+    station = db.query(Station).filter(Station.code == station_code).first()
     if not station:
         raise HTTPException(status_code=404, detail="Station not found")
     return station
 
 
-@station_router.get("/{station_name}")
+@station_router.get("name/{station_name}")
 def search_station_by_name(station_name: str, db:Session = Depends(get_db)):
-    station = db.query(Station).filter(station_name==Station.name).first()
+    station = db.query(Station).filter(Station.name == station_name).first()
     if not station:
         raise HTTPException(status_code=404, detail="Station not found")
     return station

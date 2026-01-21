@@ -10,5 +10,5 @@ class TrainResponse(BaseModel):
     train_number: str
     train_name: str
 
-    class config:
+    class Config:
         from_attributes = True

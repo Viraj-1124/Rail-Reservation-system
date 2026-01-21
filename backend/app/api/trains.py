@@ -12,7 +12,7 @@ def create_train(data:TrainCreate, db:Session=Depends(get_db)):
     if db.query(Train).filter(Train.train_number==data.train_number).first():
         raise HTTPException(status_code=400,detail="Train already exist")
     
-    train = Train(**data.dict())
+    train = Train(**data.model_dump())
     db.add(train)
     db.commit()
     db.refresh(train)
@@ -33,6 +33,7 @@ def update_train(train_number: str, data: TrainCreate, db:Session = Depends(get_
     train.train_number = data.train_number
     train.train_name = data.train_name
     db.commit()
+    db.refresh(train)
     return train
 
 
