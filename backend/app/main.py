@@ -8,6 +8,9 @@ from app.api.trains import train_router
 from app.api.routes import route_router
 from app.api.train_schedules import train_schedule_router
 from app.api.coach import coach_router 
+from app.api.seat import seat_router
+from app.api.search import router as search_router
+from app.api.availability import router as availability_router
 from sqlalchemy.orm import Session
 from app.core.database import get_db
 
@@ -51,3 +54,6 @@ app.include_router(train_router)
 app.include_router(route_router)
 app.include_router(train_schedule_router)
 app.include_router(coach_router)
+app.include_router(seat_router)
+app.include_router(search_router)
+app.include_router(availability_router)
