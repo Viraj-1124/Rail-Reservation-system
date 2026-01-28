@@ -13,25 +13,25 @@ def search_trains(db:Session, from_code:str, to_code:str, journey_date:date):
     DestRoute = aliased(Route)
 
     query = (
-        db.query(
-            Train.id,
-            Train.train_name,
-            Train.train_number,
-            SourceRoute.departure_time.label("source_departure"),
-            SourceRoute.arrival_time.label("destination_arrival")
-        )
-        .join(TrainSchedule, TrainSchedule.train_id==Train.id)
-        .join(SourceRoute, SourceRoute.train_id == Train.id)
-        .join(DestRoute, DestRoute.train_id == Train.id)
-        .join(SourceStation, SourceStation.id==SourceRoute.station_id)
-        .join(DestStation, DestStation.id == DestRoute.station_id)
-        .filter(
-            SourceStation.code == from_code,
-            DestStation.code == to_code,
-            SourceRoute.sequence < DestRoute.sequence,
-            TrainSchedule.journey_date == journey_date,
-            TrainSchedule.status == "ACTIVE"
-        )
+    db.query(
+        Train.id.label("train_id"),
+        Train.train_name.label("train_name"),
+        Train.train_number.label("train_number"),
+        SourceRoute.departure_time.label("source_departue"),   
+        DestRoute.arrival_time.label("destination_arrival")
+    )
+    .join(TrainSchedule, TrainSchedule.train_id == Train.id)
+    .join(SourceRoute, SourceRoute.train_id == Train.id)
+    .join(DestRoute, DestRoute.train_id == Train.id)
+    .join(SourceStation, SourceStation.id == SourceRoute.station_id)
+    .join(DestStation, DestStation.id == DestRoute.station_id)
+    .filter(
+        SourceStation.code == from_code,
+        DestStation.code == to_code,
+        SourceRoute.sequence < DestRoute.sequence,
+        TrainSchedule.journey_date == journey_date,
+        TrainSchedule.status == "ACTIVE"
+    )
     )
 
     return query.all()

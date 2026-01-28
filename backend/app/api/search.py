@@ -11,7 +11,7 @@ router = APIRouter(prefix="/search", tags=["Search"])
 def search_train_api(
     from_station: str = Query(..., alias="from"),
     to_station: str = Query(..., alias="to"),
-    journey_date: str= Query(...),
+    journey_date: date= Query(...),
     db:Session =Depends(get_db)
 ):
     return search_trains(db, from_station, to_station, journey_date)
