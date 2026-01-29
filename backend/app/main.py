@@ -11,6 +11,7 @@ from app.api.coach import coach_router
 from app.api.seat import seat_router
 from app.api.search import router as search_router
 from app.api.availability import router as availability_router
+from app.api.reservation import router as reservation_router
 from sqlalchemy.orm import Session
 from app.core.database import get_db
 
@@ -57,3 +58,4 @@ app.include_router(coach_router)
 app.include_router(seat_router)
 app.include_router(search_router)
 app.include_router(availability_router)
+app.include_router(reservation_router)
